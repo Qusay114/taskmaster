@@ -1,20 +1,23 @@
 package com.example.taskmaster;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-
-import androidx.navigation.fragment.NavHostFragment;
-
 import com.example.taskmaster.databinding.FragmentSecondBinding;
+import com.example.taskmaster.databinding.FragmentThirdBinding;
 
-public class SecondFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the  factory method to
+ * create an instance of this fragment.
+ */
+public class ThirdFragment extends Fragment {
 
-    private FragmentSecondBinding binding;
+    private FragmentThirdBinding binding ;
 
     @Override
     public View onCreateView(
@@ -22,7 +25,7 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        binding = FragmentThirdBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -44,5 +47,4 @@ public class SecondFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }
