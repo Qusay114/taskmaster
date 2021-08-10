@@ -1,6 +1,9 @@
 package com.example.taskmaster;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,62 +17,82 @@ import com.example.taskmaster.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        Button addTaskButton = findViewById(R.id.buttonAddTask) ;
+        Button allTasksButton = findViewById(R.id.buttonAllTasks);
+        Button task1Button = findViewById(R.id.buttonTask1);
+        Button task2Button = findViewById(R.id.buttonTask2);
+        Button task3Button = findViewById(R.id.buttonTask3);
+        ImageButton settingsImageButton = findViewById(R.id.imageButtonSettings);
 
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        addTaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent addTaskIntent = new Intent(getApplicationContext() , AddTaskActivity.class);
+                startActivity(addTaskIntent);
+            }
+        });
+
+        allTasksButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent allTasksIntent = new Intent(getApplicationContext() , AllTasksActivity.class);
+                startActivity(allTasksIntent);
+            }
+        });
+
+        task1Button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent task1Intent = new Intent(getApplicationContext() , Task1Activity.class) ;
+                startActivity(task1Intent);
+            }
+        });
+
+        task2Button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent task2Intent = new Intent(getApplicationContext() , Task2Activity.class);
+                startActivity(task2Intent);
+            }
+        });
+
+        task3Button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent task3Intent = new Intent(getApplicationContext() , Task3Activity.class);
+                startActivity(task3Intent);
+            }
+        });
+
+        settingsImageButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent settingsIntent = new Intent(getApplicationContext() , SettingsActivity.class);
+                startActivity(settingsIntent);
             }
         });
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        TextView test = findViewById(R.id.textViewTitle);
+        test.setText(sharedPreferences.getString("username" , "test"));
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-
-
 }
