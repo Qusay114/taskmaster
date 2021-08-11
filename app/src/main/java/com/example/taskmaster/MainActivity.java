@@ -4,23 +4,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.example.taskmaster.databinding.ActivityMainBinding;
+import com.example.taskmaster.tasks.TasksActivity;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,12 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button tasksButton = findViewById(R.id.buttonTasks);
         Button addTaskButton = findViewById(R.id.buttonAddTask) ;
         Button allTasksButton = findViewById(R.id.buttonAllTasks);
         Button task1Button = findViewById(R.id.buttonTask1);
         Button task2Button = findViewById(R.id.buttonTask2);
         Button task3Button = findViewById(R.id.buttonTask3);
         ImageButton settingsImageButton = findViewById(R.id.imageButtonSettings);
+        TextView usernameTextView = findViewById(R.id.textViewUsernameTasks);
 
         addTaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -86,13 +82,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
             }
         });
+
+        tasksButton.setOnClickListener(view -> {
+            Intent tasksIntent = new Intent(this , TasksActivity.class);
+            startActivity(tasksIntent);
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        TextView test = findViewById(R.id.textViewTitle);
-        test.setText(sharedPreferences.getString("username" , "test"));
+        TextView usernameTextView = findViewById(R.id.textViewUsernameTasks);
+        usernameTextView.setText(sharedPreferences.getString("username" , "test"));
     }
 }
