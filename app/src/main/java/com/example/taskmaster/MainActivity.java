@@ -29,9 +29,7 @@ public class MainActivity extends AppCompatActivity {
         Button tasksButton = findViewById(R.id.buttonTasks);
         Button addTaskButton = findViewById(R.id.buttonAddTask) ;
         Button allTasksButton = findViewById(R.id.buttonAllTasks);
-        Button task1Button = findViewById(R.id.buttonTask1);
-        Button task2Button = findViewById(R.id.buttonTask2);
-        Button task3Button = findViewById(R.id.buttonTask3);
+
         ImageButton settingsImageButton = findViewById(R.id.imageButtonSettings);
         TextView usernameTextView = findViewById(R.id.textViewUsernameTasks);
 
@@ -51,29 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        task1Button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent task1Intent = new Intent(getApplicationContext() , Task1Activity.class) ;
-                startActivity(task1Intent);
-            }
-        });
 
-        task2Button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent task2Intent = new Intent(getApplicationContext() , Task2Activity.class);
-                startActivity(task2Intent);
-            }
-        });
-
-        task3Button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent task3Intent = new Intent(getApplicationContext() , Task3Activity.class);
-                startActivity(task3Intent);
-            }
-        });
 
         settingsImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
