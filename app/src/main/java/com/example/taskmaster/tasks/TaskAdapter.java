@@ -21,7 +21,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
     private OnTaskClickListener onTaskClickListener ;
 
     public interface OnTaskClickListener{
-        void onTaskClicked(int position) ;
+        void onMoreClicked(int position) ;
         void onDeleteTask(int position) ;
     }
 
@@ -68,6 +68,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
             deleteButton.setOnClickListener(view -> {
 
                 onTaskClickListener.onDeleteTask(getAdapterPosition());
+            });
+
+            moreButton.setOnClickListener(view -> {
+                onTaskClickListener.onMoreClicked(getAdapterPosition());
             });
         }
     }
