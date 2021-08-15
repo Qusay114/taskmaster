@@ -3,10 +3,13 @@ package com.example.taskmaster.tasks;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.taskmaster.R;
 
@@ -14,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TasksActivity extends AppCompatActivity {
+
+    private TaskDatabase taskDatabase ;
+    private TaskDao taskDao ;
+    private List<TaskDetails> tasksList ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +34,36 @@ public class TasksActivity extends AppCompatActivity {
                 "        Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, \n" +
                 "        sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt." ;
 
-        List<TaskDetails> tasks = new ArrayList<>();
-        tasks.add(new TaskDetails("Task 1" , lorem));
-        tasks.add(new TaskDetails("Task 2" , lorem));
-        tasks.add(new TaskDetails("Task 3" , lorem));
-        tasks.add(new TaskDetails("Task 4" , lorem));
-        tasks.add(new TaskDetails("Task 5" , lorem));
-        tasks.add(new TaskDetails("Task 6" , lorem));
-        tasks.add(new TaskDetails("Task 7" , lorem));
-        tasks.add(new TaskDetails("Task 8" , lorem));
+        tasksList = new ArrayList<>();
+
+        taskDatabase = Room.databaseBuilder(this , TaskDatabase.class , "tasks")
+                .allowMainThreadQueries().build() ;
+        taskDao = taskDatabase.taskDao();
+        tasksList = taskDao.findAllTasks();
 
 
-        TaskAdapter taskAdapter = new TaskAdapter(tasks) ;
+        TaskAdapter taskAdapter = new TaskAdapter(tasksList , new TaskAdapter.OnTaskClickListener(){
+
+            @Override
+            public void onTaskClicked(int position) {
+
+            }
+
+            @Override
+            public void onDeleteTask(int position) {
+            taskDao.deleteTask(tasksList.get(position));
+            tasksList.remove(position);
+                Toast toast = Toast.makeText(getApplicationContext() ,
+                        "task has been deleted" ,
+                        Toast.LENGTH_LONG);
+                toast.show();
+
+//                Intent intent = getIntent() ;
+//                finish();
+//                startActivity(intent);
+                recreate();
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 this ,

@@ -31,4 +31,6 @@
     <string name="save">Save</string>
     <string name="set_your_username_from_settings">Set Your Username from settings</string>
     <string name="tasks">Tasks</string>
+    <string name="delete">Delete</string>
+    <string name="more">More</string>
 </resources>
