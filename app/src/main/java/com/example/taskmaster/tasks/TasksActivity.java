@@ -21,6 +21,7 @@ public class TasksActivity extends AppCompatActivity {
     private TaskDatabase taskDatabase ;
     private TaskDao taskDao ;
     private List<TaskDetails> tasksList ;
+    private TaskAdapter taskAdapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class TasksActivity extends AppCompatActivity {
         tasksList = taskDao.findAllTasks();
 
 
-        TaskAdapter taskAdapter = new TaskAdapter(tasksList , new TaskAdapter.OnTaskClickListener(){
+         taskAdapter = new TaskAdapter(tasksList , new TaskAdapter.OnTaskClickListener(){
 
             @Override
             public void onTaskClicked(int position) {
@@ -57,11 +58,8 @@ public class TasksActivity extends AppCompatActivity {
                         "task has been deleted" ,
                         Toast.LENGTH_LONG);
                 toast.show();
+                notifyDataSetChanged();
 
-//                Intent intent = getIntent() ;
-//                finish();
-//                startActivity(intent);
-                recreate();
             }
         });
 
@@ -73,5 +71,9 @@ public class TasksActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(taskAdapter);
 
+    }
+
+    private void notifyDataSetChanged() {
+        taskAdapter.notifyDataSetChanged();
     }
 }
