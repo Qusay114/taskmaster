@@ -45,17 +45,17 @@ public class ExampleInstrumentedTest {
         assertEquals("com.example.taskmaster", appContext.getPackageName());
     }
 
-    @Test
-    public void testChangingUsername(){
-        //click settings button to go to the settings activity
-        onView(withId(R.id.imageButtonSettings)).perform(click()) ;
-        //type Ahmad in the user name input field
-        onView(withId(R.id.editTextUsername)).perform(typeText("Ahmad") , closeSoftKeyboard()) ;
-        //click on save button to save the username
-        onView(withId(R.id.imageButtonSave)).perform(click());
-        //click on home button to go to the main activity
-        onView(withId(R.id.goHome)).perform(click());
-
-        onView(withId(R.id.textViewUsername)).check(matches(withText("Ahmad"))) ;
-    }
+//    @Test
+//    public void testChangingUsername(){
+//        //click settings button to go to the settings activity
+//        onView(withId(R.id.imageButtonSettings)).perform(click()) ;
+//        //type Ahmad in the user name input field
+//        onView(withId(R.id.editTextUsername)).perform(typeText("Ahmad") , closeSoftKeyboard()) ;
+//        //click on save button to save the username
+//        onView(withId(R.id.imageButtonSave)).perform(click());
+//        //click on home button to go to the main activity
+//        onView(withId(R.id.goHome)).perform(click());
+//
+//        onView(withId(R.id.textViewUsername)).check(matches(withText("Ahmad"))) ;
+//    }
 }
