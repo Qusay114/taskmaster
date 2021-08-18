@@ -71,8 +71,8 @@ subscription OnDeleteNote {
     updatedAt
   }
 }
-subscription OnCreateTaskDetails {
-  onCreateTaskDetails {
+subscription OnCreateTaskItem {
+  onCreateTaskItem {
     id
     title
     description
@@ -83,8 +83,8 @@ subscription OnCreateTaskDetails {
     updatedAt
   }
 }
-subscription OnUpdateTaskDetails {
-  onUpdateTaskDetails {
+subscription OnUpdateTaskItem {
+  onUpdateTaskItem {
     id
     title
     description
@@ -95,8 +95,8 @@ subscription OnUpdateTaskDetails {
     updatedAt
   }
 }
-subscription OnDeleteTaskDetails {
-  onDeleteTaskDetails {
+subscription OnDeleteTaskItem {
+  onDeleteTaskItem {
     id
     title
     description

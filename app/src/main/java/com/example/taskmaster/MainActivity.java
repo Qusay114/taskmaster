@@ -32,32 +32,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            Amplify.addPlugin(new AWSDataStorePlugin());
-            Amplify.configure(getApplicationContext());
-
-            Log.i("Tutorial", "Initialized Amplify");
-        } catch (AmplifyException e) {
-            Log.e("Tutorial", "Could not initialize Amplify", e);
-        }
-
-        Task item = Task.builder().title("Qusay").build();
-        Amplify.DataStore.save(item,
-                success -> Log.i("Tutorial","Item Saved "+ success.item().getTitle()),
-                error -> Log.e("Tutorial","not Saved",error)
-        );
-
-
-        Amplify.DataStore.query(Task.class,
-                todos -> {
-                    while (todos.hasNext()) {
-                        Task todo = todos.next();
-                        Log.i("Tutorial", "==== Todo ====");
-                        Log.i("Tutorial", "Name: " + todo.getTitle());
-                    }
-                },
-                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
-        );
+//        try {
+//            Amplify.addPlugin(new AWSDataStorePlugin());
+//            Amplify.configure(getApplicationContext());
+//
+//            Log.i("Tutorial", "Initialized Amplify");
+//        } catch (AmplifyException e) {
+//            Log.e("Tutorial", "Could not initialize Amplify", e);
+//        }
+//
+//        Task item = Task.builder().title("Qusay").build();
+//        Amplify.DataStore.save(item,
+//                success -> Log.i("Tutorial","Item Saved "+ success.item().getTitle()),
+//                error -> Log.e("Tutorial","not Saved",error)
+//        );
+//
+//
+//        Amplify.DataStore.query(Task.class,
+//                todos -> {
+//                    while (todos.hasNext()) {
+//                        Task todo = todos.next();
+//                        Log.i("Tutorial", "==== Todo ====");
+//                        Log.i("Tutorial", "Name: " + todo.getTitle());
+//                    }
+//                },
+//                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+//        );
 
         Button tasksButton = findViewById(R.id.buttonTasks);
         Button addTaskButton = findViewById(R.id.buttonAddTask) ;

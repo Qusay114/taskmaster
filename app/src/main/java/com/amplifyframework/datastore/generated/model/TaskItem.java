@@ -16,13 +16,13 @@ import com.amplifyframework.core.model.query.predicate.QueryField;
 
 import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
-/** This is an auto generated class representing the TaskDetails type in your schema. */
+/** This is an auto generated class representing the TaskItem type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "TaskDetails")
-public final class TaskDetails implements Model {
-  public static final QueryField ID = field("TaskDetails", "id");
-  public static final QueryField TITLE = field("TaskDetails", "title");
-  public static final QueryField DESCRIPTION = field("TaskDetails", "description");
+@ModelConfig(pluralName = "TaskItems")
+public final class TaskItem implements Model {
+  public static final QueryField ID = field("TaskItem", "id");
+  public static final QueryField TITLE = field("TaskItem", "title");
+  public static final QueryField DESCRIPTION = field("TaskItem", "description");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String title;
   private final @ModelField(targetType="String") String description;
@@ -48,7 +48,7 @@ public final class TaskDetails implements Model {
       return updatedAt;
   }
   
-  private TaskDetails(String id, String title, String description) {
+  private TaskItem(String id, String title, String description) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -61,12 +61,12 @@ public final class TaskDetails implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      TaskDetails taskDetails = (TaskDetails) obj;
-      return ObjectsCompat.equals(getId(), taskDetails.getId()) &&
-              ObjectsCompat.equals(getTitle(), taskDetails.getTitle()) &&
-              ObjectsCompat.equals(getDescription(), taskDetails.getDescription()) &&
-              ObjectsCompat.equals(getCreatedAt(), taskDetails.getCreatedAt()) &&
-              ObjectsCompat.equals(getUpdatedAt(), taskDetails.getUpdatedAt());
+      TaskItem taskItem = (TaskItem) obj;
+      return ObjectsCompat.equals(getId(), taskItem.getId()) &&
+              ObjectsCompat.equals(getTitle(), taskItem.getTitle()) &&
+              ObjectsCompat.equals(getDescription(), taskItem.getDescription()) &&
+              ObjectsCompat.equals(getCreatedAt(), taskItem.getCreatedAt()) &&
+              ObjectsCompat.equals(getUpdatedAt(), taskItem.getUpdatedAt());
       }
   }
   
@@ -85,7 +85,7 @@ public final class TaskDetails implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("TaskDetails {")
+      .append("TaskItem {")
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("title=" + String.valueOf(getTitle()) + ", ")
       .append("description=" + String.valueOf(getDescription()) + ", ")
@@ -108,7 +108,7 @@ public final class TaskDetails implements Model {
    * @return an instance of this model with only ID populated
    * @throws IllegalArgumentException Checks that ID is in the proper format
    */
-  public static TaskDetails justId(String id) {
+  public static TaskItem justId(String id) {
     try {
       UUID.fromString(id); // Check that ID is in the UUID format - if not an exception is thrown
     } catch (Exception exception) {
@@ -118,7 +118,7 @@ public final class TaskDetails implements Model {
               "creating a new object, use the standard builder method and leave the ID field blank."
       );
     }
-    return new TaskDetails(
+    return new TaskItem(
       id,
       null,
       null
@@ -131,7 +131,7 @@ public final class TaskDetails implements Model {
       description);
   }
   public interface BuildStep {
-    TaskDetails build();
+    TaskItem build();
     BuildStep id(String id) throws IllegalArgumentException;
     BuildStep title(String title);
     BuildStep description(String description);
@@ -143,10 +143,10 @@ public final class TaskDetails implements Model {
     private String title;
     private String description;
     @Override
-     public TaskDetails build() {
+     public TaskItem build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new TaskDetails(
+        return new TaskItem(
           id,
           title,
           description);

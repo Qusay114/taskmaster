@@ -10,7 +10,7 @@ type Note @model {
 }
 
 
-type TaskDetails @model {
+type TaskItem @model {
   id: ID!
   title: String
   description: String

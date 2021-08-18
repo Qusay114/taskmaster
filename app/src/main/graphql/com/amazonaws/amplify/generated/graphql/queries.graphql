@@ -115,13 +115,13 @@ query ListNotes(
     startedAt
   }
 }
-query SyncTaskDetails(
-  $filter: ModelTaskDetailsFilterInput
+query SyncTaskItems(
+  $filter: ModelTaskItemFilterInput
   $limit: Int
   $nextToken: String
   $lastSync: AWSTimestamp
 ) {
-  syncTaskDetails(
+  syncTaskItems(
     filter: $filter
     limit: $limit
     nextToken: $nextToken
@@ -141,8 +141,8 @@ query SyncTaskDetails(
     startedAt
   }
 }
-query GetTaskDetails($id: ID!) {
-  getTaskDetails(id: $id) {
+query GetTaskItem($id: ID!) {
+  getTaskItem(id: $id) {
     id
     title
     description
@@ -153,12 +153,12 @@ query GetTaskDetails($id: ID!) {
     updatedAt
   }
 }
-query ListTaskDetails(
-  $filter: ModelTaskDetailsFilterInput
+query ListTaskItems(
+  $filter: ModelTaskItemFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listTaskDetails(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listTaskItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
       title
