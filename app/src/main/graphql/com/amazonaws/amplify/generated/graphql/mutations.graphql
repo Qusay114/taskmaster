@@ -8,6 +8,9 @@ mutation CreateTask(
     title
     description
     status
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -21,6 +24,9 @@ mutation UpdateTask(
     title
     description
     status
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -34,6 +40,9 @@ mutation DeleteTask(
     title
     description
     status
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -45,6 +54,9 @@ mutation CreateNote(
   createNote(input: $input, condition: $condition) {
     id
     content
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -56,6 +68,9 @@ mutation UpdateNote(
   updateNote(input: $input, condition: $condition) {
     id
     content
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -67,6 +82,54 @@ mutation DeleteNote(
   deleteNote(input: $input, condition: $condition) {
     id
     content
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateTaskDetails(
+  $input: CreateTaskDetailsInput!
+  $condition: ModelTaskDetailsConditionInput
+) {
+  createTaskDetails(input: $input, condition: $condition) {
+    id
+    title
+    description
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateTaskDetails(
+  $input: UpdateTaskDetailsInput!
+  $condition: ModelTaskDetailsConditionInput
+) {
+  updateTaskDetails(input: $input, condition: $condition) {
+    id
+    title
+    description
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteTaskDetails(
+  $input: DeleteTaskDetailsInput!
+  $condition: ModelTaskDetailsConditionInput
+) {
+  deleteTaskDetails(input: $input, condition: $condition) {
+    id
+    title
+    description
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }

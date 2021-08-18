@@ -5,6 +5,9 @@ subscription OnCreateTask {
     title
     description
     status
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -15,6 +18,9 @@ subscription OnUpdateTask {
     title
     description
     status
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -25,6 +31,9 @@ subscription OnDeleteTask {
     title
     description
     status
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -33,6 +42,9 @@ subscription OnCreateNote {
   onCreateNote {
     id
     content
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -41,6 +53,9 @@ subscription OnUpdateNote {
   onUpdateNote {
     id
     content
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
@@ -49,6 +64,45 @@ subscription OnDeleteNote {
   onDeleteNote {
     id
     content
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateTaskDetails {
+  onCreateTaskDetails {
+    id
+    title
+    description
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateTaskDetails {
+  onUpdateTaskDetails {
+    id
+    title
+    description
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteTaskDetails {
+  onDeleteTaskDetails {
+    id
+    title
+    description
+    _version
+    _deleted
+    _lastChangedAt
     createdAt
     updatedAt
   }
