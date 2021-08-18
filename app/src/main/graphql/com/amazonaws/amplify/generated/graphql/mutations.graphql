@@ -89,11 +89,11 @@ mutation DeleteNote(
     updatedAt
   }
 }
-mutation CreateTaskDetails(
-  $input: CreateTaskDetailsInput!
-  $condition: ModelTaskDetailsConditionInput
+mutation CreateTaskItem(
+  $input: CreateTaskItemInput!
+  $condition: ModelTaskItemConditionInput
 ) {
-  createTaskDetails(input: $input, condition: $condition) {
+  createTaskItem(input: $input, condition: $condition) {
     id
     title
     description
@@ -104,11 +104,11 @@ mutation CreateTaskDetails(
     updatedAt
   }
 }
-mutation UpdateTaskDetails(
-  $input: UpdateTaskDetailsInput!
-  $condition: ModelTaskDetailsConditionInput
+mutation UpdateTaskItem(
+  $input: UpdateTaskItemInput!
+  $condition: ModelTaskItemConditionInput
 ) {
-  updateTaskDetails(input: $input, condition: $condition) {
+  updateTaskItem(input: $input, condition: $condition) {
     id
     title
     description
@@ -119,11 +119,11 @@ mutation UpdateTaskDetails(
     updatedAt
   }
 }
-mutation DeleteTaskDetails(
-  $input: DeleteTaskDetailsInput!
-  $condition: ModelTaskDetailsConditionInput
+mutation DeleteTaskItem(
+  $input: DeleteTaskItemInput!
+  $condition: ModelTaskItemConditionInput
 ) {
-  deleteTaskDetails(input: $input, condition: $condition) {
+  deleteTaskItem(input: $input, condition: $condition) {
     id
     title
     description
