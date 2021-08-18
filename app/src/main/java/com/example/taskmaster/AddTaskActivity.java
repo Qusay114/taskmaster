@@ -37,7 +37,7 @@ public class AddTaskActivity extends AppCompatActivity {
             toast.show();
             taskDao.insertOneTask(new TaskDetails(taskTitle.getText().toString() ,
                     taskDescription.getText().toString()
-                    ));
+            ));
         });
 
     }
