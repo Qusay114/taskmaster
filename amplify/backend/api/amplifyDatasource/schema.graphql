@@ -8,3 +8,10 @@ type Note @model {
   id: ID!
   content: String!
 }
+
+
+type TaskDetails @model {
+  id: ID!
+  title: String
+  description: String
+}
