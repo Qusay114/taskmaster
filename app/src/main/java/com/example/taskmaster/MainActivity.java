@@ -13,17 +13,25 @@ import android.view.View;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.TaskItem;
+import com.example.taskmaster.tasks.TaskDetails;
 import com.example.taskmaster.tasks.TasksActivity;
 
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private AppBarConfiguration appBarConfiguration;
 
 
@@ -31,33 +39,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        configureAmplify();
 
-//        try {
-//            Amplify.addPlugin(new AWSDataStorePlugin());
-//            Amplify.configure(getApplicationContext());
-//
-//            Log.i("Tutorial", "Initialized Amplify");
-//        } catch (AmplifyException e) {
-//            Log.e("Tutorial", "Could not initialize Amplify", e);
-//        }
-//
-//        Task item = Task.builder().title("Qusay").build();
-//        Amplify.DataStore.save(item,
-//                success -> Log.i("Tutorial","Item Saved "+ success.item().getTitle()),
-//                error -> Log.e("Tutorial","not Saved",error)
-//        );
-//
-//
-//        Amplify.DataStore.query(Task.class,
-//                todos -> {
-//                    while (todos.hasNext()) {
-//                        Task todo = todos.next();
-//                        Log.i("Tutorial", "==== Todo ====");
-//                        Log.i("Tutorial", "Name: " + todo.getTitle());
-//                    }
-//                },
-//                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
-//        );
 
         Button tasksButton = findViewById(R.id.buttonTasks);
         Button addTaskButton = findViewById(R.id.buttonAddTask) ;
@@ -103,6 +86,19 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         TextView usernameTextView = findViewById(R.id.textViewUsernameTasks);
-        usernameTextView.setText(sharedPreferences.getString("username" , "test"));
+        usernameTextView.setText(sharedPreferences.getString("username" , "set you username"));
     }
+
+    void configureAmplify(){
+        try {
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.configure(getApplicationContext());
+
+        } catch(AmplifyException exception){
+            Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
+        }
+
+    }
+
 }
