@@ -32,8 +32,6 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-        configureAmplify();
-
 
         taskTitle = findViewById(R.id.editTextTaskTitle);
         taskDescription = findViewById(R.id.editTextTaskDescription);
@@ -59,17 +57,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
-    void configureAmplify(){
-        try {
-            Amplify.addPlugin(new AWSDataStorePlugin());
-            Amplify.addPlugin(new AWSApiPlugin());
-            Amplify.configure(getApplicationContext());
 
-        } catch(AmplifyException exception){
-            Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
-        }
-
-    }
 
      TaskItem populateTaskToApi(TaskItem taskItem){
         Amplify.API.mutate(ModelMutation.create(taskItem) ,

@@ -33,4 +33,5 @@
     <string name="tasks">Tasks</string>
     <string name="delete">Delete</string>
     <string name="more">More</string>
+    <string name="add_task_toast_text">Task has been added</string>
 </resources>
