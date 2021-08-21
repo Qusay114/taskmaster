@@ -97,7 +97,7 @@ public class TasksActivity extends AppCompatActivity {
                             for (TaskItem taskItem : response.getData())
                             {
                                 tasksList.add(new TaskDetails(taskItem.getTitle() , taskItem.getDescription()));
-                                Log.i(TAG, "onCreate: the TaskItems titles are Fuuuuuuuuuuuuck worked=> " + taskItem.getTitle());
+                                Log.i(TAG, "onCreate: the TaskItems titles are  => " + taskItem.getTitle());
                             }
                         handler.sendEmptyMessage(1);
 

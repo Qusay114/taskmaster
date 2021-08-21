@@ -12,12 +12,17 @@ import android.widget.Toast;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.TaskItem;
+import com.amplifyframework.datastore.generated.model.Team;
 import com.example.taskmaster.tasks.TaskDao;
 import com.example.taskmaster.tasks.TaskDatabase;
 import com.example.taskmaster.tasks.TaskDetails;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -27,6 +32,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private EditText taskTitle ;
     private EditText taskDescription ;
     private Button addTask ;
+    private List<Team> teams ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +53,12 @@ public class AddTaskActivity extends AppCompatActivity {
 
             taskDao.insertOneTask( new TaskDetails(title , description));
 
-            TaskItem taskItem = TaskItem.builder().title(title).description(description).build();
+            teams = new ArrayList<>();
+            getTeamFromApiByName("Coders");
+//            Team team = Team.builder().name("Coders").build();
+            Team team = teams.get(0);
+            team = populateTeamToApi(team);
+            TaskItem taskItem = TaskItem.builder().team(team).title(title).description(description).build();
             populateTaskToApi(taskItem);
 
             Toast toast = Toast.makeText(AddTaskActivity.this , "Task has been added" , Toast.LENGTH_LONG);
@@ -61,9 +72,33 @@ public class AddTaskActivity extends AppCompatActivity {
 
      TaskItem populateTaskToApi(TaskItem taskItem){
         Amplify.API.mutate(ModelMutation.create(taskItem) ,
-                success -> Log.i(TAG, "populateTaskToApi: " + taskItem.getTitle()) ,
-                error -> Log.i(TAG, "populateTaskToApi: " + taskItem.getTitle())
+                success -> Log.i(TAG, "populateTaskToApi: taskItem Title --> " + taskItem.getTitle()) ,
+                error -> Log.i(TAG, "failed to populateTaskToApi: taskItem Title" + taskItem.getTitle())
                 );
         return taskItem ;
+    }
+
+    Team populateTeamToApi(Team team){
+        Amplify.API.mutate(ModelMutation.create(team) ,
+                success -> Log.i(TAG, "populateTeamToApi: team Name --> " + team.getName()),
+                error -> Log.i(TAG, "failed to populateTeamToApi: team Name -->  " + team.getName())
+                );
+        return team ;
+    }
+
+    Team getTeamFromApiByName(String name){
+
+        Amplify.API.query(ModelQuery.list(Team.class , Team.NAME.contains(name)) ,
+                response -> {
+                            for (Team team : response.getData()){
+                                Log.i(TAG, "succeed to getTeamFromApiByName: Team Name --> "+ team.getName());
+                                teams.add(team) ;
+                            }
+
+
+                } ,
+                failure -> Log.i(TAG, "failed to getTeamFromApiByName: Team Name -->" + failure.toString())
+                );
+        return teams.get(0) ;
     }
 }
