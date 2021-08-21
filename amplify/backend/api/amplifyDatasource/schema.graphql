@@ -9,9 +9,17 @@ type Note @model {
   content: String!
 }
 
-
-type TaskItem @model {
+type Team @model {
   id: ID!
+  name: String!
+  tasks: [TaskItem] @connection(keyName: "taskItem" , fields: ["id"])
+}
+
+
+type TaskItem @model @key(name: "taskItem" , fields: ["teamId"]){
+  id: ID!
+  teamId: ID!
   title: String
   description: String
+  team: Team! @connection(fields: ["teamId"] )
 }
