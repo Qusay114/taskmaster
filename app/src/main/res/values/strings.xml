@@ -34,4 +34,10 @@
     <string name="delete">Delete</string>
     <string name="more">More</string>
     <string name="add_task_toast_text">Task has been added</string>
+
+    <string-array name="team_names_array">
+        <item>TeamA</item>
+        <item>TeamB</item>
+        <item>TeamC</item>
+    </string-array>
 </resources>
