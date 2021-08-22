@@ -72,6 +72,8 @@ public class AddTaskActivity extends AppCompatActivity {
         Spinner spinner = findViewById(R.id.spinner);
         teamsNames = getResources().getStringArray(R.array.team_names_array);
 
+        populateTeams(teamsNames);
+
         teams = new ArrayList<>();
          getTeamsFromApiByName() ;
 
