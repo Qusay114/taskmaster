@@ -3,6 +3,7 @@ package com.example.taskmaster;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,6 +54,8 @@ public class VerificationActivity extends AppCompatActivity {
                 success -> {
             Log.i(TAG, "your account has been confirmed successfully --> " + success.toString());
             toastHandler.sendEmptyMessage(1);
+                    Intent goToHome = new Intent(getApplicationContext() , MainActivity.class);
+                    startActivity(goToHome);
                 } ,
                 failure -> Log.i(TAG, "failed to verificate the account --> " + failure.toString())
                 );

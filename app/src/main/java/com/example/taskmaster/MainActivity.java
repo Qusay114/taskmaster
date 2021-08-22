@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        configureAmplify();
 
 
         Button tasksButton = findViewById(R.id.buttonTasks);
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToSignIn = new Intent(getApplicationContext() , SignUpActivity.class);
+                Intent goToSignIn = new Intent(getApplicationContext() , SignInActivity.class);
                 startActivity(goToSignIn);
             }
         });

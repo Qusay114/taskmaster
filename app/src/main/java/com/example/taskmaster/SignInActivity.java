@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -37,13 +38,22 @@ public class SignInActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         singInBtn = findViewById(R.id.signInButton);
+
+        singInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn(username.getText().toString() , password.getText().toString());
+            }
+        });
     }
 
     private void signIn(String username , String password){
         Amplify.Auth.signIn(username , password ,
                 success -> {
                     Log.i(TAG, "successfully signed in -->: " + success.toString());
-                    navigateToHandler.sendEmptyMessage(1);
+//                    navigateToHandler.sendEmptyMessage(1);
+                    Intent goToHome = new Intent(getApplicationContext() , MainActivity.class);
+                    startActivity(goToHome);
                 } ,
                 failure -> Log.i(TAG, "failed to sign in --> " + failure.toString())
                 );
