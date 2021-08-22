@@ -9,4 +9,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="white_200">#efddddad</color>
     <color name="blue">#52B9E0</color>
+
+    <color name="background_color">#009688</color>
+    <color name="white_greyish">#EEEEEE</color>
+    <color name="button_selectorcolor">#9E9E9E</color>
+
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

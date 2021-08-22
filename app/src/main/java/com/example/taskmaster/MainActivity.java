@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         Button tasksButton = findViewById(R.id.buttonTasks);
         Button addTaskButton = findViewById(R.id.buttonAddTask) ;
         Button allTasksButton = findViewById(R.id.buttonAllTasks);
+        Button signUpBtn = findViewById(R.id.signUpButton);
+        Button signInBtn = findViewById(R.id.signInButton);
 
         ImageButton settingsImageButton = findViewById(R.id.imageButtonSettings);
         TextView usernameTextView = findViewById(R.id.textViewUsernameTasks);
@@ -79,6 +82,23 @@ public class MainActivity extends AppCompatActivity {
             Intent tasksIntent = new Intent(this , TasksActivity.class);
             startActivity(tasksIntent);
         });
+
+        signUpBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent goToSignUp = new Intent( getApplicationContext(), SignUpActivity.class);
+                startActivity(goToSignUp);
+
+            }
+        });
+
+        signInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToSignIn = new Intent(getApplicationContext() , SignUpActivity.class);
+                startActivity(goToSignIn);
+            }
+        });
     }
 
     @Override
@@ -93,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(getApplicationContext());
 
         } catch(AmplifyException exception){
