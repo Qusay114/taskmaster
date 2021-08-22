@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView title ;
+    private TextView usernameTextView ;
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration appBarConfiguration;
@@ -41,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        title = findViewById(R.id.textViewTitle);
+        title.setText("Welcome " + getUsername() + " To TaskMaster Application");
+        usernameTextView = findViewById(R.id.textViewUsernameTasks);
+        usernameTextView.setText(getUsername());
 
         Button tasksButton = findViewById(R.id.buttonTasks);
         Button addTaskButton = findViewById(R.id.buttonAddTask) ;
@@ -49,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         Button signInBtn = findViewById(R.id.signInButton);
 
         ImageButton settingsImageButton = findViewById(R.id.imageButtonSettings);
-        TextView usernameTextView = findViewById(R.id.textViewUsernameTasks);
 
         addTaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -104,8 +110,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        TextView usernameTextView = findViewById(R.id.textViewUsernameTasks);
-        usernameTextView.setText(sharedPreferences.getString("username" , "set you username"));
+        usernameTextView = findViewById(R.id.textViewUsernameTasks);
+        usernameTextView.setText(getUsername());
+//        usernameTextView.setText(sharedPreferences.getString("username" , "set you username"));
     }
 
     void configureAmplify(){
@@ -119,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
         }
 
+    }
+
+    private String getUsername(){
+        AuthUser authUser = Amplify.Auth.getCurrentUser();
+        Log.i(TAG, "getUsername: ----------> " + authUser.getUsername());
+        return authUser.getUsername();
     }
 
 }
