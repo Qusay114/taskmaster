@@ -12,11 +12,13 @@ import android.view.View;
 
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
+import com.amplifyframework.core.Action;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
@@ -52,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Button tasksButton = findViewById(R.id.buttonTasks);
         Button addTaskButton = findViewById(R.id.buttonAddTask) ;
         Button allTasksButton = findViewById(R.id.buttonAllTasks);
-        Button signUpBtn = findViewById(R.id.signUpButton);
-        Button signInBtn = findViewById(R.id.signInButton);
+
+        Button signOutBtn = findViewById(R.id.signOutButton);
 
         ImageButton settingsImageButton = findViewById(R.id.imageButtonSettings);
 
@@ -88,20 +90,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(tasksIntent);
         });
 
-        signUpBtn.setOnClickListener(new View.OnClickListener(){
+
+
+        signOutBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent goToSignUp = new Intent( getApplicationContext(), SignUpActivity.class);
-                startActivity(goToSignUp);
-
-            }
-        });
-
-        signInBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goToSignIn = new Intent(getApplicationContext() , SignInActivity.class);
-                startActivity(goToSignIn);
+                signOut();
             }
         });
     }
@@ -132,6 +126,17 @@ public class MainActivity extends AppCompatActivity {
         AuthUser authUser = Amplify.Auth.getCurrentUser();
         Log.i(TAG, "getUsername: ----------> " + authUser.getUsername());
         return authUser.getUsername();
+    }
+
+    private void signOut(){
+        Amplify.Auth.signOut(
+                () -> {
+                    Intent goToLandingPage = new Intent(getApplicationContext() , LandingActivity.class);
+                    startActivity(goToLandingPage);
+                },
+
+                failure -> Log.i(TAG, "signOut: failed")
+        );
     }
 
 }

@@ -7,16 +7,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.TaskItem;
+import com.amplifyframework.datastore.generated.model.Team;
 import com.example.taskmaster.R;
 
 import java.util.ArrayList;
@@ -51,7 +54,10 @@ public class TasksActivity extends AppCompatActivity {
 
         tasksList = new ArrayList<>();
 
-            getTasksItemFromApi();
+//            getTasksItemFromApi();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String teamName = sharedPreferences.getString("teamName" , "TeamA");
+        getTasksByTeam(teamName);
 
 
 
@@ -108,6 +114,18 @@ public class TasksActivity extends AppCompatActivity {
                     handler.sendEmptyMessage(1);
         });
 
+    }
+
+    private void getTasksByTeam(String teamName){
+        Amplify.API.query(ModelQuery.list(Team.class , Team.NAME.contains(teamName)) ,
+                response -> {
+                        for (Team team : response.getData())
+                            for (TaskItem taskItem : team.getTasks())
+                                tasksList.add(new TaskDetails(taskItem.getTitle() , taskItem.getDescription()));
+                        handler.sendEmptyMessage(1);
+                } ,
+                error -> Log.e(TAG, "getTasksByTeam: " + error.toString() )
+                ) ;
     }
 
 
