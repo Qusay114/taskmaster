@@ -62,21 +62,27 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.textViewUsernameTasks)).check(matches(withText("Ahmad"))) ;
     }
 
-    //uncompleted text
     @Test
-    public void testRecyclerView(){
-        //go to add task activity
-        onView(withId(R.id.buttonAddTask)).perform(click()) ;
-        //enter the task title
-        onView(withId(R.id.editTextTaskTitle)).perform(typeText("TestTask"));
-        //enter the task description
-        onView(withId(R.id.editTextTaskDescription)).perform(typeText("task from test espresso"));
-        //add the task
-        onView(withId(R.id.buttonAddTask)).perform(click());
-//        MyNameActivity activity = activityTestRule.getActivity();
-//        onView(withText(R.string.toast_text)).
-//                inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).
-//                check(matches(isDisplayed()));
-
+    public void testUIElements(){
+        onView(withId(R.id.buttonTasks)).check(matches(withText("TASKS")));
     }
+
+//    @Test
+//    public void testRecyclerView(){
+//        //go to add task activity
+//        onView(withId(R.id.buttonAddTask)).perform(click()) ;
+//        //enter the task title
+//        onView(withId(R.id.editTextTaskTitle)).perform(typeText("TestTask"));
+//        //enter the task description
+//        onView(withId(R.id.editTextTaskDescription)).perform(typeText("task from test espresso"));
+//        //add the task
+//        onView(withId(R.id.buttonAddTask)).perform(click());
+////        MyNameActivity activity = activityTestRule.getActivity();
+////        onView(withText(R.string.toast_text)).
+////                inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).
+////                check(matches(isDisplayed()));
+//
+//    }
+
+
 }
