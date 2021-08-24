@@ -69,6 +69,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
 
                 onTaskClickListener.onDeleteTask(getAdapterPosition());
             });
+
+            moreButton.setOnClickListener(view -> {
+                onTaskClickListener.onTaskClicked(getAdapterPosition());
+            });
         }
     }
 }

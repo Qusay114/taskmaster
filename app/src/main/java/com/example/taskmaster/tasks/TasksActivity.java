@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -65,6 +66,13 @@ public class TasksActivity extends AppCompatActivity {
 
             @Override
             public void onTaskClicked(int position) {
+                Intent goToTaskDetails = new Intent(getApplicationContext() , TaskDetailsActivity.class);
+                String taskTitle = tasksList.get(position).getTitle();
+                String taskDescription = tasksList.get(position).getDescription();
+                goToTaskDetails.putExtra("taskTitle" ,  taskTitle);
+                goToTaskDetails.putExtra("taskDescription" , taskDescription);
+
+                startActivity(goToTaskDetails);
 
             }
 
