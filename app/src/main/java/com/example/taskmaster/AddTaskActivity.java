@@ -1,12 +1,15 @@
 package com.example.taskmaster;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -28,18 +31,24 @@ import com.example.taskmaster.tasks.TaskDao;
 import com.example.taskmaster.tasks.TaskDatabase;
 import com.example.taskmaster.tasks.TaskDetails;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AddTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "AddTaskActivity";
+    private static final int REQUEST_FOR_FILE = 188;
     private TaskDatabase taskDatabase ;
     private TaskDao taskDao ;
     private EditText taskTitle ;
     private EditText taskDescription ;
     private Button addTask ;
+    private Button chooseFileBtn ;
     private List<Team> teams ;
     private String teamName;
     private String[] teamsNames ;
@@ -64,6 +73,7 @@ public class AddTaskActivity extends AppCompatActivity {
         taskTitle = findViewById(R.id.editTextTaskTitle);
         taskDescription = findViewById(R.id.editTextTaskDescription);
         addTask = findViewById(R.id.buttonAddTask) ;
+        chooseFileBtn = findViewById(R.id.buttonChooseFile);
 
         taskDatabase = Room.databaseBuilder(this , TaskDatabase.class , "tasks")
                 .allowMainThreadQueries().build();
@@ -110,11 +120,19 @@ public class AddTaskActivity extends AppCompatActivity {
 
         });
 
+        chooseFileBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                chooseFileFromDevice();
+            }
+        });
+
+
     }
 
 
 
-     TaskItem populateTaskToApi(TaskItem taskItem){
+    TaskItem populateTaskToApi(TaskItem taskItem){
         Amplify.API.mutate(ModelMutation.create(taskItem) ,
                 success -> {
             Log.i(TAG, "populateTaskToApi: taskItem Title --> " + taskItem.getTitle());
@@ -151,5 +169,50 @@ public class AddTaskActivity extends AppCompatActivity {
                     );
         }
 
+    }
+
+
+    //to get and save file -->
+
+    private void chooseFileFromDevice(){
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        chooseFile = Intent.createChooser(chooseFile , "Choose File");
+        startActivityForResult(chooseFile,REQUEST_FOR_FILE);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_FOR_FILE && resultCode == RESULT_OK){
+            Log.i(TAG, "onActivityResult: returned from file explorer");
+            Log.i(TAG, "onActivityResult: => " + data.getData());
+            Log.i(TAG, "onActivityResult: " + data.getType());
+
+            File uploadFile = new File(getApplicationContext().getFilesDir() , "uploadFile");
+
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                FileUtils.copy(inputStream , new FileOutputStream(uploadFile));
+
+            } catch(Exception exception){
+                Log.e(TAG, "onActivityResult: file upload failed" + exception.toString());
+            }
+
+            uploadFileToApiStorage(uploadFile);
+
+        }
+    }
+
+    private void uploadFileToApiStorage(File uploadFile){
+        String time = String.format("u1=%s.jpg" ,(new Date().getTime()) );
+        Amplify.Storage.uploadFile(
+                time,
+                uploadFile ,
+                success -> Log.i(TAG, "uploadFileToS3: succeeded " + success.getKey()) ,
+                failure -> Log.e(TAG, "uploadFileToS3: failed " + failure.toString())
+        );
     }
 }
