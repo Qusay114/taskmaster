@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
@@ -37,6 +38,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -260,4 +262,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 failure -> Log.e(TAG, "uploadFileToS3: failed " + failure.toString())
         );
     }
+
+
+
 }

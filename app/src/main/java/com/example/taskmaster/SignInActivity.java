@@ -12,7 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.core.Amplify;
+
+import java.util.Date;
+import java.util.Random;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "SignInActivity";
@@ -53,9 +57,25 @@ public class SignInActivity extends AppCompatActivity {
                     Log.i(TAG, "successfully signed in -->: " + success.toString());
 //                    navigateToHandler.sendEmptyMessage(1);
                     Intent goToHome = new Intent(getApplicationContext() , MainActivity.class);
+                    recordAnEvent();
                     startActivity(goToHome);
                 } ,
                 failure -> Log.i(TAG, "failed to sign in --> " + failure.toString())
                 );
+    }
+
+    private void recordAnEvent(){
+        Random random = new Random();
+        Integer randomAge = random.nextInt(50) + 15;
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name(TAG)
+                .addProperty("Channel", "SMS")
+                .addProperty("Successful", true)
+                .addProperty("ProcessDuration", 792)
+                .addProperty("UserAge", randomAge)
+                .addProperty("Date" , String.valueOf(new Date()))
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
     }
 }

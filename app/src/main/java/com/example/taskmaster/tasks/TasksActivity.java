@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.TaskItem;
@@ -24,8 +25,10 @@ import com.amplifyframework.datastore.generated.model.Team;
 import com.example.taskmaster.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class TasksActivity extends AppCompatActivity {
 
@@ -53,7 +56,6 @@ public class TasksActivity extends AppCompatActivity {
             }
         }) ;
 
-        //TODO : show saved images from S3 AWS 
 
         tasksList = new ArrayList<>();
 
@@ -76,6 +78,10 @@ public class TasksActivity extends AppCompatActivity {
 
                 startActivity(goToTaskDetails);
 
+
+
+
+                recordAnEvent("NavigateToTaskDetailssActivity");
             }
 
             @Override
@@ -144,6 +150,21 @@ public class TasksActivity extends AppCompatActivity {
                 .allowMainThreadQueries().build();
         TaskDao taskDao = taskDatabase.taskDao() ;
         return taskDao.findAllTasks();
+    }
+
+    private void recordAnEvent(String eventName){
+        Random random = new Random();
+        Integer randomAge = random.nextInt(50) + 15;
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name(eventName)
+                .addProperty("Channel", "SMS")
+                .addProperty("Successful", true)
+                .addProperty("ProcessDuration", 792)
+                .addProperty("UserAge", randomAge)
+                .addProperty("Date" , String.valueOf(new Date()))
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
     }
 }
 
