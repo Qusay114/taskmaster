@@ -75,13 +75,9 @@ public class TasksActivity extends AppCompatActivity {
                 String taskDescription = tasksList.get(position).getDescription();
                 goToTaskDetails.putExtra("taskTitle" ,  taskTitle);
                 goToTaskDetails.putExtra("taskDescription" , taskDescription);
-
+                recordAnEvent("NavigateToTaskDetailssActivity");
                 startActivity(goToTaskDetails);
 
-
-
-
-                recordAnEvent("NavigateToTaskDetailssActivity");
             }
 
             @Override
