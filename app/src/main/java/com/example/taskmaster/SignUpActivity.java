@@ -14,12 +14,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
+
+import java.util.Date;
+import java.util.Random;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -59,6 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 Intent goToConfirmation = new Intent(getApplicationContext() , VerificationActivity.class);
                 goToConfirmation.putExtra("username" , username.getText().toString());
+                recordAnEvent("NavigateVerificationActivity");
                 startActivity(goToConfirmation);
 
             }
@@ -78,6 +83,22 @@ public class SignUpActivity extends AppCompatActivity {
                 } ,
                 failure -> Log.i(TAG, "signUp: failed --> " + failure.toString())
                 );
+    }
+
+
+    private void recordAnEvent(String eventName){
+        Random random = new Random();
+        Integer randomAge = random.nextInt(50) + 15;
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name(eventName)
+                .addProperty("Channel", "SMS")
+                .addProperty("Successful", true)
+                .addProperty("ProcessDuration", 792)
+                .addProperty("UserAge", randomAge)
+                .addProperty("Date" , String.valueOf(new Date()))
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
     }
 
 

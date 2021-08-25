@@ -9,11 +9,16 @@ import android.view.View;
 import android.widget.Button;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.analytics.AnalyticsEvent;
+import com.amplifyframework.analytics.pinpoint.AWSPinpointAnalyticsPlugin;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
+
+import java.util.Date;
+import java.util.Random;
 
 public class LandingActivity extends AppCompatActivity {
 
@@ -27,6 +32,10 @@ public class LandingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
         configureAmplify();
 
+        //record events , AWS Analytics
+
+
+
         signUpBtn = findViewById(R.id.signUpButton);
         signInBtn = findViewById(R.id.signInButton);
 
@@ -34,6 +43,7 @@ public class LandingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent goToSignUp = new Intent(getApplicationContext() , SignUpActivity.class);
+                recordAnEvent("NavigateToSignUpActivity");
                 startActivity(goToSignUp);
             }
         });
@@ -42,6 +52,7 @@ public class LandingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent goToSignIn = new Intent(getApplicationContext() , SignInActivity.class);
+                recordAnEvent("NavigateToSignInActivity");
                 startActivity(goToSignIn);
             }
         });
@@ -53,11 +64,27 @@ public class LandingActivity extends AppCompatActivity {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSS3StoragePlugin());
+            Amplify.addPlugin(new AWSPinpointAnalyticsPlugin(getApplication()));
             Amplify.configure(getApplicationContext());
 
         } catch(AmplifyException exception){
             Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
         }
 
+    }
+
+    private void recordAnEvent(String eventName){
+        Random random = new Random();
+        Integer randomAge = random.nextInt(50) + 15;
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name(eventName)
+                .addProperty("Channel", "SMS")
+                .addProperty("Successful", true)
+                .addProperty("ProcessDuration", 792)
+                .addProperty("UserAge", randomAge)
+                .addProperty("Date" , String.valueOf(new Date()))
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
     }
 }
