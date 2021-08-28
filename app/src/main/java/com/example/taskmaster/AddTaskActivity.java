@@ -174,49 +174,6 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
-    //to get and save file -->
-
-    private void chooseFileFromDevice(){
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.setType("*/*");
-        chooseFile = Intent.createChooser(chooseFile , "Choose File");
-        startActivityForResult(chooseFile,REQUEST_FOR_FILE);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_FOR_FILE && resultCode == RESULT_OK){
-            Log.i(TAG, "onActivityResult: returned from file explorer");
-            Log.i(TAG, "onActivityResult: => " + data.getData());
-            Log.i(TAG, "onActivityResult: " + data.getType());
-
-            File uploadFile = new File(getApplicationContext().getFilesDir() , "uploadFile");
-
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                FileUtils.copy(inputStream , new FileOutputStream(uploadFile));
-
-            } catch(Exception exception){
-                Log.e(TAG, "onActivityResult: file upload failed" + exception.toString());
-            }
-
-            uploadFileToApiStorage(uploadFile);
-
-        }
-    }
-
-    private void uploadFileToApiStorage(File uploadFile){
-        String key = taskTitle.toString().equals(null) ? "defualtTask.jpg" :taskTitle.getText().toString()+".jpg";
-        Amplify.Storage.uploadFile(
-                key,
-                uploadFile ,
-                success -> Log.i(TAG, "uploadFileToS3: succeeded " + success.getKey()) ,
-                failure -> Log.e(TAG, "uploadFileToS3: failed " + failure.toString())
-        );
-    }
 
 
     //to get and save file -->
