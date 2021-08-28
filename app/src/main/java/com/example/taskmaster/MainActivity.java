@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void recordAnEvent(String eventName){
+        Log.i(TAG, "recordAnEvent: woooooooooooorked");
         Random random = new Random();
         Integer randomAge = random.nextInt(50) + 15;
         AnalyticsEvent event = AnalyticsEvent.builder()
