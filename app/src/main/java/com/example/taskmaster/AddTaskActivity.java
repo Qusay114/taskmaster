@@ -4,15 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,7 +68,22 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
         setContentView(R.layout.activity_add_task);
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type   = intent.getType();
+
+//        if(Intent.ACTION_SEND.equals(action) && type!=null){
+//
+//        }
+        if (type != null)
+            if (type.equals("image/*"))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    handleSendImage(intent) ;
+                }
 
         toastHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -132,6 +155,48 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void handleSendImage(Intent intent) {
+//        Log.i(TAG, "handleSendImage: " + intent.toString());
+////        File uploadFile = new File(getApplicationContext().getFilesDir() , "uploadFile");
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        String path = getRealPathFromUri( getApplicationContext(), imageUri) ;
+        Log.i(TAG, "handleSendImage: paaaaaaaaaaath" + path);
+        path = path.replace(" " , "");
+//        path = path.replace(" " , "/");
+//        imageUri.
+        File uploadFile = new File(path);
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(intent.getData());
+            FileUtils.copy(inputStream , new FileOutputStream(uploadFile));
+
+        } catch(Exception exception){
+            Log.e(TAG, "onActivityResult: file upload failed" + exception.toString());
+            Log.i(TAG, "handleSendImage: paaaaaaaaaaath" + path);
+        }
+//
+        uploadFileToApiStorage(uploadFile);
+//        intent.setType()
+//        intent.setType("*/*");
+//        startActivityForResult(intent,REQUEST_FOR_FILE);
+
+    }
+
+
+    String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
 
     TaskItem populateTaskToApi(TaskItem taskItem){
@@ -209,7 +274,13 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void uploadFileToApiStorage(File uploadFile){
-        String key = taskTitle.toString().equals(null) ? "defualtTask.jpg" :taskTitle.getText().toString()+".jpg";
+
+        String key ;
+        if (taskTitle != null)
+            key = taskTitle.getText().toString()+".jpg";
+        else
+             key =String.format("defaultTask%s.jpg" , new Date().getTime());
+
         Amplify.Storage.uploadFile(
                 key,
                 uploadFile ,
@@ -219,49 +290,6 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
-    //to get and save file -->
-
-    private void chooseFileFromDevice(){
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.setType("*/*");
-        chooseFile = Intent.createChooser(chooseFile , "Choose File");
-        startActivityForResult(chooseFile,REQUEST_FOR_FILE);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_FOR_FILE && resultCode == RESULT_OK){
-            Log.i(TAG, "onActivityResult: returned from file explorer");
-            Log.i(TAG, "onActivityResult: => " + data.getData());
-            Log.i(TAG, "onActivityResult: " + data.getType());
-
-            File uploadFile = new File(getApplicationContext().getFilesDir() , "uploadFile");
-
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                FileUtils.copy(inputStream , new FileOutputStream(uploadFile));
-
-            } catch(Exception exception){
-                Log.e(TAG, "onActivityResult: file upload failed" + exception.toString());
-            }
-
-            uploadFileToApiStorage(uploadFile);
-
-        }
-    }
-
-    private void uploadFileToApiStorage(File uploadFile){
-        String time = String.format("u1=%s.jpg" ,(new Date().getTime()) );
-        Amplify.Storage.uploadFile(
-                time,
-                uploadFile ,
-                success -> Log.i(TAG, "uploadFileToS3: succeeded " + success.getKey()) ,
-                failure -> Log.e(TAG, "uploadFileToS3: failed " + failure.toString())
-        );
-    }
 
 
 
