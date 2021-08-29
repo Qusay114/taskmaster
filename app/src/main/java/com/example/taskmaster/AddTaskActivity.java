@@ -6,13 +6,17 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,6 +65,17 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type   = intent.getType();
+
+//        if(Intent.ACTION_SEND.equals(action) && type!=null){
+//
+//        }
+        if (type.equals("image/*"))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                handleSendImage(intent) ;
+            }
 
         toastHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -132,6 +147,48 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void handleSendImage(Intent intent) {
+//        Log.i(TAG, "handleSendImage: " + intent.toString());
+////        File uploadFile = new File(getApplicationContext().getFilesDir() , "uploadFile");
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        String path = getRealPathFromUri( getApplicationContext(), imageUri) ;
+        Log.i(TAG, "handleSendImage: paaaaaaaaaaath" + path);
+        path = path.replace(" " , "/");
+//        path = path.replace(" " , "/");
+//        imageUri.
+        File uploadFile = new File(path);
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(intent.getData());
+            FileUtils.copy(inputStream , new FileOutputStream(uploadFile));
+
+        } catch(Exception exception){
+            Log.e(TAG, "onActivityResult: file upload failed" + exception.toString());
+            Log.i(TAG, "handleSendImage: paaaaaaaaaaath" + path);
+        }
+//
+        uploadFileToApiStorage(uploadFile);
+//        intent.setType()
+//        intent.setType("*/*");
+//        startActivityForResult(intent,REQUEST_FOR_FILE);
+
+    }
+
+
+    String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
 
     TaskItem populateTaskToApi(TaskItem taskItem){
@@ -209,7 +266,13 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void uploadFileToApiStorage(File uploadFile){
-        String key = taskTitle.toString().equals(null) ? "defualtTask.jpg" :taskTitle.getText().toString()+".jpg";
+
+        String key ;
+        if (taskTitle != null)
+            key = taskTitle.getText().toString()+".jpg";
+        else
+             key =String.format("defaultTask%s.jpg" , new Date().getTime());
+
         Amplify.Storage.uploadFile(
                 key,
                 uploadFile ,
