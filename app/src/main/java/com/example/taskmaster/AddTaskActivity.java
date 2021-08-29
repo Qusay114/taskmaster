@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -64,6 +68,9 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
         setContentView(R.layout.activity_add_task);
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -72,10 +79,11 @@ public class AddTaskActivity extends AppCompatActivity {
 //        if(Intent.ACTION_SEND.equals(action) && type!=null){
 //
 //        }
-        if (type.equals("image/*"))
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                handleSendImage(intent) ;
-            }
+        if (type != null)
+            if (type.equals("image/*"))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    handleSendImage(intent) ;
+                }
 
         toastHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -154,7 +162,7 @@ public class AddTaskActivity extends AppCompatActivity {
         Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
         String path = getRealPathFromUri( getApplicationContext(), imageUri) ;
         Log.i(TAG, "handleSendImage: paaaaaaaaaaath" + path);
-        path = path.replace(" " , "/");
+        path = path.replace(" " , "");
 //        path = path.replace(" " , "/");
 //        imageUri.
         File uploadFile = new File(path);
